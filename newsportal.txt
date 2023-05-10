@@ -1,0 +1,109 @@
+>>> from News.models import *
+>>> u1 = User.objects.create_user(username='Vanya') 
+>>> u1
+<User: Vanya>
+>>> u2 = User.objects.create_user(username='Masha') 
+>>> u2
+<User: Masha>
+>>> Author.objects.create(authorUser=u1)
+<Author: Author object (1)>
+>>> Author.objects.create(authorUser=u2) 
+<Author: Author object (2)>
+>>> Category.objects.create(name='IT') 
+<Category: Category object (1)>
+>>> Category.objects.create(name='Sport') 
+<Category: Category object (2)>
+>>> Category.objects.create(name='NewsSpace') 
+<Category: Category object (3)>
+>>> Category.objects.create(name='Game')      
+<Category: Category object (4)>
+>>> a1 = Author.objects.get(id=1)      
+>>> a1
+<Author: Author object (1)>
+>>> a2 = Author.objects.get(id=2) 
+>>> Post.objects.create(author=a1, categoryType='AR', title='FirstHumanInSpace', text='somebigtextaboutGagarin')
+<Post: Post object (1)>
+>>> Post.objects.create(author=a1, categoryType='AR', title='NewGame', text='CS2Real')                           
+<Post: Post object (2)>
+>>> Post.objects.create(author=a2, categoryType='NW', title='AMD', text='newprocessorRAZER44') 
+<Post: Post object (3)>
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=3))
+>>> Post.objects.get(id=2).postCategory.add(Category.objects.get(id=4))
+>>> Post.objects.get(id=3).postCategory.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=3).postCategory.add(Category.objects.get(id=4)) 
+>>> Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=1).authorUser, text='wOwwOwwOw')
+<Comment: Comment object (1)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=2).authorUser, text='nice article') 
+<Comment: Comment object (2)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=1).authorUser, text='unreal')       
+<Comment: Comment object (3)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=1).authorUser, text='verybigprice') 
+<Comment: Comment object (4)>
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=2).like() 
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=2).dislike() 
+>>> Comment.objects.get(id=3).like()    
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=3).dislike() 
+>>> Comment.objects.get(id=4).dislike() 
+>>> Comment.objects.get(id=4).dislike()
+>>> Comment.objects.get(id=4).dislike()
+>>> Comment.objects.get(id=4).dislike()
+>>> Comment.objects.get(id=4).rating   
+-4
+>>> Comment.objects.get(id=1).rating 
+5
+>>> Comment.objects.get(id=2).rating 
+3
+>>> Comment.objects.get(id=3).rating 
+3
+>>> a1
+<Author: Author object (1)>
+>>> a1.update_rating()
+>>> a1.ratingAuthor
+4
+>>> a2.update_rating() 
+>>> a2.ratingAuthor    
+3
+>>> ar = Author.objects.order_by('-ratingAuthor')
+>>> ar
+>>> for i in ar:         
+...     i.ratingAuthor
+...     i.authorUser.username
+... 
+4
+'Vanya'
+3
+'Masha'
+>>> Post.objects.get(id=1).preview()                                                             
+'somebigtextaboutGagarin...'
+>>> Post.objects.order_by('author').values('dateCreation', 'author__authorUser', 'rating', 'title')       
+<QuerySet [{'dateCreation': datetime.datetime(2023, 5, 10, 19, 52, 27, 890960, tzinfo=datetime.timezone.utc), 'author__authorUser': 1
+, 'rating': 0, 'title': 'FirstHumanInSpace'}, {'dateCreation': datetime.datetime(2023, 5, 10, 19, 53, 42, 352295, tzinfo=datetime.tim
+ezone.utc), 'author__authorUser': 1, 'rating': 0, 'title': 'NewGame'}, {'dateCreation': datetime.datetime(2023, 5, 10, 19, 55, 11, 78
+0698, tzinfo=datetime.timezone.utc), 'author__authorUser': 2, 'rating': 0, 'title': 'AMD'}]>
+>>> sd = Post.objects.order_by('rating')
+>>> sd
+<QuerySet [<Post: Post object (1)>, <Post: Post object (2)>, <Post: Post object (3)>]>
+>>> for i in sd:
+...     i.rating
+...     i.title
+... 
+0
+'FirstHumanInSpace'
+0
+'NewGame'
+0
+'AMD'
+>>>
+
+
